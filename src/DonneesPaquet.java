@@ -1,8 +1,8 @@
-public class CompteurLignes {
+public class DonneesPaquet {
     private int nbrCommentaires;
     private int nbrCodes;
 
-    public CompteurLignes (int comments, int codes) {
+    public DonneesPaquet (int comments, int codes) {
         this.nbrCodes = codes;
         this.nbrCommentaires = comments;
     }

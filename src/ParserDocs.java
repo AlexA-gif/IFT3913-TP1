@@ -12,9 +12,9 @@ public class ParserDocs {
     private boolean commentFound = false;
     private boolean codeFound = false;
 
-    public CompteurLignes verifsLignes (File dossier)
+    public DonneesClasse verifsLignes (File dossier)
     {
-        CompteurLignes lignes = new CompteurLignes(0,0);
+        DonneesClasse lignes = new DonneesClasse(0,0);
 
         try{
             BufferedReader reader = new BufferedReader(new FileReader(dossier));
@@ -27,12 +27,17 @@ public class ParserDocs {
             reader.close();
             System.out.println(nbrCommentaires);
             System.out.println(nbrCodes);
-            lignes = new CompteurLignes(nbrCommentaires, nbrCodes);
+
+            lignes.addCodes(nbrCodes);
+            lignes.addComment(nbrCommentaires);
+
+            //fonction qui compte les whiles, if, etc... 
+            //calcule WMC
+            //insertion du WMC
 
         }catch(Exception ex) {
             System.out.println(ex);
         }
-
         return lignes;
     }
 
@@ -62,8 +67,6 @@ public class ParserDocs {
                 }
                 continue;
             }
-
-
 
             if(ligne.charAt(i) == '/'  && !isString){
                 if(i+1<ligne.length() && ligne.charAt(i+1) == '/' && !isComment){
@@ -98,31 +101,11 @@ public class ParserDocs {
         }
         codeFound = false;
         commentFound = false;
-
-
     }
 
 
-
+    //TO_DO : méthode analyser fichier pour WMC
 }
 
-
-
-/*
-
-                if(ligneEnCours != null && ( ligneEnCours.indexOf("*") != (-1) || ligneEnCours.indexOf("/") != (-1))){
-                    nbrCommentaires++;
-                }else{
-                    nbrCodes++;
-                }
-
-
-*/
-
-
-/*
-//
-*
-**/
 
 
