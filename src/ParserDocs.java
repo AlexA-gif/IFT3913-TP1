@@ -13,7 +13,13 @@ public class ParserDocs {
     private boolean codeFound = false;
 
     public DonneesClasse verifsLignes (File dossier)
-    {
+    {   
+        nbrCodes = 0;
+        nbrCommentaires = 0;
+        isString = false;
+        isComment = false;
+        commentFound = false;
+        codeFound = false;
         DonneesClasse lignes = new DonneesClasse(0,0);
 
         try{
@@ -25,8 +31,6 @@ public class ParserDocs {
                 ligneEnCours = reader.readLine();
             }
             reader.close();
-            System.out.println(nbrCommentaires);
-            System.out.println(nbrCodes);
 
             lignes.addCodes(nbrCodes);
             lignes.addComment(nbrCommentaires);

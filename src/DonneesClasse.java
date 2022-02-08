@@ -46,6 +46,14 @@ public class DonneesClasse {
         return;
     }
 
+    public void setWMC(int input){
+        this.WMC=input;
+        this.updateDegre();
+        return;
+    }
+
+    
+
     private void updateDensite(){
         if(this.nbrCommentaires == 0 || this.nbrCodes == 0){
             this.densiteCommentaire=0;
@@ -53,12 +61,6 @@ public class DonneesClasse {
             return;
         }
         this.densiteCommentaire = (float)this.nbrCommentaires/(float)this.nbrCodes;
-        this.updateDegre();
-        return;
-    }
-
-    public void setWMC(int input){
-        this.WMC=input;
         this.updateDegre();
         return;
     }
