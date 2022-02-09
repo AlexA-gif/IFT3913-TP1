@@ -1,4 +1,4 @@
-public class App {
+public class TestWMC {
     //simple test
     /*
     allo for each ne doit pas être compté

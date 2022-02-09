@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.*;
+import java.lang.reflect.*;
 
 public class ParserDocs {
 
@@ -38,7 +39,7 @@ public class ParserDocs {
             lignes.addComment(nbrCommentaires);
             //calcul WMC
             lignes.setWMC(calculerWMC(dossier));
-            System.out.println(lignes.getWMC() + dossier.getName());
+            System.out.println(lignes.getWMC() + "   "+dossier.getName());
             //fonction qui compte les whiles, if, etc... 
             //calcule WMC
             //insertion du WMC
@@ -114,37 +115,78 @@ public class ParserDocs {
 
     //TO_DO : méthode analyser fichier pour WMC
 
-    public int calculerWMC(File dossier){
+    public int calculerWMC(File dossier) {
+
         int WMC = 0;
         String nomClasse = dossier.getName();
         int posPoint = nomClasse.indexOf(".");
         nomClasse = nomClasse.substring(0, posPoint);
 
+        try {
+            Class classeEnCours = Class.forName(nomClasse);
+            int nbrMethodes = classeEnCours.getDeclaredMethods().length;
+            WMC+=nbrMethodes;
+        } catch (ClassNotFoundException e) {
+            WMC+=1;            
+        }
+        
         try{
+
             BufferedReader reader = new BufferedReader(new FileReader(dossier));
             String ligneEnCours = reader.readLine();
 
+            boolean isComment = false;
+
             while(ligneEnCours != null) {
 
+                //traitement des commentaires multilignes
+                if(isComment){
+                    if (ligneEnCours.indexOf("*/") != -1){
+                        isComment = false;
+                        StringBuffer ligneTraitement = new StringBuffer(ligneEnCours);
+                        ligneTraitement.delete(0,ligneEnCours.indexOf("*/") + 1);
+                        ligneEnCours = ligneTraitement.toString();
+                    }else{
+                        ligneEnCours = reader.readLine();
+                        continue;
+                    }
+                }
+
+                if (ligneEnCours.indexOf("/*") != -1){
+                    if (ligneEnCours.indexOf("*/") != -1){
+                        
+                        StringBuffer ligneTraitement = new StringBuffer(ligneEnCours);
+                        ligneTraitement.delete(ligneEnCours.indexOf("/*"),ligneEnCours.indexOf("*/") + 1);
+                        ligneEnCours = ligneTraitement.toString();
+                    } else {
+                        isComment = true;
+                        ligneEnCours = ligneEnCours.substring(0, ligneEnCours.indexOf("/*"));
+                        
+                    }
+                }
+
                 // enlever les guillemets et les mots se trouvant entre 2 positions de guillemets
-                while (ligneEnCours.indexOf("\"") != -1){
+                while (ligneEnCours.indexOf("\"") != -1 ){
                     int index = ligneEnCours.indexOf("\"");
                     int nextindex = ligneEnCours.indexOf("\"", index +1);
                     StringBuffer ligneTraitement = new StringBuffer (ligneEnCours);
                     ligneTraitement.delete(index, nextindex+1);
                     ligneEnCours = ligneTraitement.toString();
                 }
-                //enlever les commentaires 
-                while(ligneEnCours.indexOf("//") != -1){
+
+                //enlever les commentaires simples
+                while(ligneEnCours.indexOf("//") != -1 ){
                     int index = ligneEnCours.indexOf("//");
                     ligneEnCours = ligneEnCours.substring(0, index);
                 }
+
                 //analyser pour des for, if, while, case 
                 for(int i = 0; i<listeCommandes.length; i++){
                     if(ligneEnCours.indexOf(listeCommandes[i]) != -1){
                         WMC++;
                     }
                 }
+                
                 ligneEnCours = reader.readLine();
             }
 
