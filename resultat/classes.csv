@@ -1,0 +1,5 @@
+chemin,class,classe_LOC,classe_CLOC,classe_DC
+.\test,App.java,15,1,0.06666667
+.\test,movingBall.java,39,7,0.17948718
+.\test\testDossier1\testDossier2,App.java,6,1,0.16666667
+.\test\testDossier1\testDossier2,movingBall.java,39,7,0.17948718

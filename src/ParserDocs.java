@@ -2,6 +2,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.lang.*;
 
 public class ParserDocs {
 
@@ -11,6 +12,7 @@ public class ParserDocs {
     private boolean isComment = false;
     private boolean commentFound = false;
     private boolean codeFound = false;
+    private String[] listeCommandes = new String[] {"for", "if", "case", "while"};
 
     public DonneesClasse verifsLignes (File dossier)
     {   
@@ -34,7 +36,9 @@ public class ParserDocs {
 
             lignes.addCodes(nbrCodes);
             lignes.addComment(nbrCommentaires);
-
+            //calcul WMC
+            lignes.setWMC(calculerWMC(dossier));
+            System.out.println(lignes.getWMC() + dossier.getName());
             //fonction qui compte les whiles, if, etc... 
             //calcule WMC
             //insertion du WMC
@@ -109,6 +113,48 @@ public class ParserDocs {
 
 
     //TO_DO : méthode analyser fichier pour WMC
+
+    public int calculerWMC(File dossier){
+        int WMC = 0;
+        String nomClasse = dossier.getName();
+        int posPoint = nomClasse.indexOf(".");
+        nomClasse = nomClasse.substring(0, posPoint);
+
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(dossier));
+            String ligneEnCours = reader.readLine();
+
+            while(ligneEnCours != null) {
+
+                // enlever les guillemets et les mots se trouvant entre 2 positions de guillemets
+                while (ligneEnCours.indexOf("\"") != -1){
+                    int index = ligneEnCours.indexOf("\"");
+                    int nextindex = ligneEnCours.indexOf("\"", index +1);
+                    StringBuffer ligneTraitement = new StringBuffer (ligneEnCours);
+                    ligneTraitement.delete(index, nextindex+1);
+                    ligneEnCours = ligneTraitement.toString();
+                }
+                //enlever les commentaires 
+                while(ligneEnCours.indexOf("//") != -1){
+                    int index = ligneEnCours.indexOf("//");
+                    ligneEnCours = ligneEnCours.substring(0, index);
+                }
+                //analyser pour des for, if, while, case 
+                for(int i = 0; i<listeCommandes.length; i++){
+                    if(ligneEnCours.indexOf(listeCommandes[i]) != -1){
+                        WMC++;
+                    }
+                }
+                ligneEnCours = reader.readLine();
+            }
+
+        }catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return WMC;
+    }
+
+
 }
 
 

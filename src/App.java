@@ -11,6 +11,7 @@ public class App {
 
         File chemin = new File ("./test/");
         FileExplorer fe = new FileExplorer();
+        String[] listeCommandes = new String[] {"for", "if", "case", "while"};
 
         //creation des fichiers csv
         try {
