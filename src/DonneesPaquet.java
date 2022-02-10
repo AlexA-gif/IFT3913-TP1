@@ -30,7 +30,7 @@ public class DonneesPaquet {
         return this.WCP;
     }
 
-    public float degre(){
+    public float getDegre(){
         return this.degre;
     }
 
@@ -46,8 +46,8 @@ public class DonneesPaquet {
         return;
     }
 
-    public void setWCP(int input){
-        this.WCP=input;
+    public void addWCP(int input){
+        this.WCP+=input;
         this.updateDegre();
         return;
     }

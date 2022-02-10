@@ -49,12 +49,14 @@ public class FileExplorer {
         for(DonneesClasse data : javaFilesData){
             retour.addCodes(data.getCodes());
             retour.addComment(data.getComments());
+            retour.addWCP(data.getWMC());
         }
         for(DonneesPaquet data : repoData){
             retour.addCodes(data.getCodes());
             retour.addComment(data.getComments());
+            retour.addWCP(data.getWCP());
         }
-        //setter le WCP du paquet
+        
         
         //updater le paquet csv avec les données du paquet courant si presence de .java
         if(nbrJavaFiles>0){
@@ -129,11 +131,12 @@ public class FileExplorer {
         return retour;
     }
 
-    //TO_DO ajouter le segment concernant le WCS
+
     private void writeInCSV(DonneesClasse input, String path, String classe){
         try {
             String strToWrite = ""+path+","+classe+","+input.getCodes()+","+
-                input.getComments()+","+input.getDensite()+"\n";
+                input.getComments()+","+input.getDensite()+","+input.getWMC()+
+                ","+input.getDegre()+"\n";
 
             FileWriter writer = new FileWriter("./resultat/classes.csv", true);
             writer.append(strToWrite);
@@ -148,7 +151,8 @@ public class FileExplorer {
     private void writeInCSV(DonneesPaquet input, String path, String paquet){
         try {
             String strToWrite = ""+path+","+paquet+","+input.getCodes()+","+
-                input.getComments()+","+input.getDensite()+"\n";
+                input.getComments()+","+input.getDensite()+","+
+                input.getWCP()+","+input.getDegre()+"\n";
 
             FileWriter writer = new FileWriter("./resultat/paquets.csv", true);
             writer.append(strToWrite);
@@ -159,7 +163,4 @@ public class FileExplorer {
             e.printStackTrace();
         }
     }
-
-    //}
-
 }

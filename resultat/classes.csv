@@ -1,6 +1,6 @@
-chemin,class,classe_LOC,classe_CLOC,classe_DC
-.\test,App.java,16,7,0.4375
-.\test,movingBall.java,39,7,0.17948718
-.\test,TestWMC.java,16,7,0.4375
-.\test\testDossier1\testDossier2,App.java,6,1,0.16666667
-.\test\testDossier1\testDossier2,movingBall.java,39,7,0.17948718
+chemin,class,classe_LOC,classe_CLOC,classe_DC,WMC,classe_BC
+.\test,App.java,16,7,0.4375,4,0.109375
+.\test,movingBall.java,39,7,0.17948718,1,0.17948718
+.\test,TestWMC.java,16,7,0.4375,4,0.109375
+.\test\testDossier1\testDossier2,App.java,6,1,0.16666667,1,0.16666667
+.\test\testDossier1\testDossier2,movingBall.java,39,7,0.17948718,1,0.17948718

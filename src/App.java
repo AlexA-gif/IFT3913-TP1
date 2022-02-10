@@ -11,7 +11,6 @@ public class App {
 
         File chemin = new File ("./test/");
         FileExplorer fe = new FileExplorer();
-        String[] listeCommandes = new String[] {"for", "if", "case", "while"};
 
         //creation des fichiers csv
         try {
@@ -24,13 +23,13 @@ public class App {
             toCreate2.createNewFile();
 
             FileWriter writer = new FileWriter("./resultat/classes.csv");
-            writer.append("chemin,class,classe_LOC,classe_CLOC,classe_DC");
+            writer.append("chemin,class,classe_LOC,classe_CLOC,classe_DC,WMC,classe_BC");
             writer.append("\n");
             writer.flush();
             writer.close();
 
             writer = new FileWriter("./resultat/paquets.csv");
-            writer.append("chemin,paquet,paquet_LOC,paquet_CLOC,paquet_DC");
+            writer.append("chemin,paquet,paquet_LOC,paquet_CLOC,paquet_DC,WCP,paquet_BC");
             writer.append("\n");
             writer.flush();
             writer.close();
@@ -46,10 +45,3 @@ public class App {
     }
 
 }
-
-
-/*
-
-
-
-*/

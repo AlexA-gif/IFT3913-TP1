@@ -2,8 +2,6 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.*;
-import java.lang.reflect.*;
 
 public class ParserDocs {
 
@@ -39,7 +37,6 @@ public class ParserDocs {
             lignes.addComment(nbrCommentaires);
             //calcul WMC
             lignes.setWMC(calculerWMC(dossier));
-            System.out.println(lignes.getWMC() + "   "+dossier.getName());
             //fonction qui compte les whiles, if, etc... 
             //calcule WMC
             //insertion du WMC
@@ -111,9 +108,6 @@ public class ParserDocs {
         codeFound = false;
         commentFound = false;
     }
-
-
-    //TO_DO : méthode analyser fichier pour WMC
 
     public int calculerWMC(File dossier) {
 
@@ -189,6 +183,7 @@ public class ParserDocs {
                 
                 ligneEnCours = reader.readLine();
             }
+            reader.close();
 
         }catch(Exception ex) {
             System.out.println(ex);
