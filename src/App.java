@@ -9,7 +9,7 @@ public class App {
     //test 2
     public static void main(String[] args) throws Exception {
 
-        File chemin = new File ("./test/");
+        File chemin = new File ("./test2/");
         FileExplorer fe = new FileExplorer();
 
         //creation des fichiers csv

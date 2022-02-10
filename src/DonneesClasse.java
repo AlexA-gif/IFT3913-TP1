@@ -2,7 +2,6 @@ public class DonneesClasse {
     private int nbrCommentaires;
     private int nbrCodes;
     private float densiteCommentaire;
-
     private int WMC;
     private float degre; 
 
@@ -51,8 +50,6 @@ public class DonneesClasse {
         this.updateDegre();
         return;
     }
-
-    
 
     private void updateDensite(){
         if(this.nbrCommentaires == 0 || this.nbrCodes == 0){

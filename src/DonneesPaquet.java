@@ -2,7 +2,6 @@ public class DonneesPaquet {
     private int nbrCommentaires;
     private int nbrCodes;
     private float densiteCommentaire;
-
     private int WCP;
     private float degre;
 
@@ -51,7 +50,6 @@ public class DonneesPaquet {
         this.updateDegre();
         return;
     }
-
 
     private void updateDensite(){
         if(this.nbrCommentaires == 0 || this.nbrCodes == 0){

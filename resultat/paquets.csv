@@ -1,3 +1,3 @@
 chemin,paquet,paquet_LOC,paquet_CLOC,paquet_DC,WCP,paquet_BC
-.\test\testDossier1\testDossier2,/testDossier1/testDossier2,45,8,0.17777778,2,0.08888889
-.\test,,116,29,0.25,11,0.022727273
+.\test2\testDossier1\testDossier2,/testDossier1/testDossier2,133,103,0.7744361,19,0.040759794
+.\test2,,287,219,0.7630662,45,0.016957026

@@ -3,21 +3,37 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+/**
+ * Classe permettant de traverser un fichier .java donné comme paramètre et 
+ * d'identifier le nombre de lignes de commentaires et le nombre de lignes de
+ * code dans le fichier.
+ */
 public class ParserDocs {
 
+    /**Paramètres d'identification de ligne */
     private int nbrCodes = 0;
     private int nbrCommentaires = 0;
-    private boolean isString = false;
+
+    /**Paramètres d'identification de l'état d'une ligne */
     private boolean isComment = false;
     private boolean commentFound = false;
     private boolean codeFound = false;
-    private String[] listeCommandes = new String[] {"for", "if", "case", "while"};
 
+    /**Point de décisions pour le calcul du WMC */
+    private String[] listeCommandes = new String[] {"for(", "for (", "if(", "if (", "case", "while( ", "while ("};
+
+    /**
+     * Cree l'ensemble de données nécessaires pour la définition de la classe 
+     * (chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC)
+     * 
+     * @param dossier Chemin du fichier .java en traitement
+     * 
+     * @return Les données contenues dans la classe 
+     */
     public DonneesClasse verifsLignes (File dossier)
     {   
         nbrCodes = 0;
         nbrCommentaires = 0;
-        isString = false;
         isComment = false;
         commentFound = false;
         codeFound = false;
@@ -35,68 +51,74 @@ public class ParserDocs {
 
             lignes.addCodes(nbrCodes);
             lignes.addComment(nbrCommentaires);
-            //calcul WMC
             lignes.setWMC(calculerWMC(dossier));
-            //fonction qui compte les whiles, if, etc... 
-            //calcule WMC
-            //insertion du WMC
 
         }catch(Exception ex) {
             System.out.println(ex);
         }
+
         return lignes;
     }
 
-
+    /**
+     * Identifie si la ligne possède de commentaire de de code 
+     * 
+     * @param ligne
+     */
     private void analyserLigne (String ligne){
-        
+        String traitement = ligne;
+
+        /**Ligne vide => Aucun traitement */
         if (ligne.length() == 0){
             return;
         }
 
-        for (int i = 0; i < ligne.length(); i++){
+        /**Ligne est un commentaire */
+        if(isComment){
+            traitement="/*"+traitement;
 
-            if(isComment){
+            /**Si le commentaire finit */
+            if(traitement.contains("*/")){ 
                 commentFound=true;
-                if(ligne.charAt(i) =='*' && i+1<ligne.length() && ligne.charAt(i+1)=='/' ){
-                    i++;
-                    isComment=false;
-                }
-                if(i==ligne.length()-1){
-                    break;
-                }
-                continue;
+                traitement=traitement.replaceAll(".*[*]/", ""); //enlève le commentaire
+                isComment=false;
+            }else{
+                nbrCommentaires++;
+                return;
             }
-            if(isString){
-                if(ligne.charAt(i)=='"'){
-                    isString=false;
-                }
-                continue;
-            }
+        }
 
-            if(ligne.charAt(i) == '/'  && !isString){
-                if(i+1<ligne.length() && ligne.charAt(i+1) == '/' && !isComment){
-                    commentFound=true;
-                    break;
-                } else if(i+1<ligne.length() && ligne.charAt(i+1) == '*'){
-                    i++;
-                    isComment = true;
-                    commentFound=true;
-                    continue;
-                }else if(!isComment){
-                    codeFound = true;
-                    continue;
-                }
-            }
+        if(traitement.contains("\"")){
+            traitement=traitement.replaceAll("\".*\"", "");
+        }
 
-            if(ligne.charAt(i) == '"' && !isString && !isComment){
-                codeFound= true;
-                isString = true;
-                continue;
+        if(traitement.contains("/*")){
+            commentFound=true;
+            if(traitement.contains("*/")){
+                traitement=traitement.replaceAll("/[*].*[*]/", "");
+            }else{
+                isComment=true;
+                nbrCommentaires++;
+                return;
             }
             
-            codeFound = true;
-            
+        }
+
+        if(traitement.contains("//")){
+            traitement=traitement.replaceAll("//.*","");
+            commentFound=true;
+        }
+
+        if(traitement.contains(" ")){
+            traitement=traitement.replaceAll(" ","");
+        }
+
+        if(traitement.contains("\t")){
+            traitement=traitement.replaceAll("\t","");
+        }
+
+        if(traitement.length()>0){
+            codeFound=true;
         }
 
         if(codeFound){
@@ -107,23 +129,13 @@ public class ParserDocs {
         }
         codeFound = false;
         commentFound = false;
+
     }
 
     public int calculerWMC(File dossier) {
 
         int WMC = 0;
-        String nomClasse = dossier.getName();
-        int posPoint = nomClasse.indexOf(".");
-        nomClasse = nomClasse.substring(0, posPoint);
 
-        try {
-            Class classeEnCours = Class.forName(nomClasse);
-            int nbrMethodes = classeEnCours.getDeclaredMethods().length;
-            WMC+=nbrMethodes;
-        } catch (ClassNotFoundException e) {
-            WMC+=1;            
-        }
-        
         try{
 
             BufferedReader reader = new BufferedReader(new FileReader(dossier));
@@ -145,10 +157,15 @@ public class ParserDocs {
                         continue;
                     }
                 }
+                
+                //calcul nombre méthodes dans une classe
+                if(ligneEnCours.matches("(.*\\bpublic \\b.*|.*\\bprivate \\b.*|.*\\bprotected \\b.*|.*\\bstatic \\b.*)[(].*")){
+                    WMC++;
+                }
 
                 if (ligneEnCours.indexOf("/*") != -1){
                     if (ligneEnCours.indexOf("*/") != -1){
-                        
+                    
                         StringBuffer ligneTraitement = new StringBuffer(ligneEnCours);
                         ligneTraitement.delete(ligneEnCours.indexOf("/*"),ligneEnCours.indexOf("*/") + 1);
                         ligneEnCours = ligneTraitement.toString();
@@ -163,6 +180,9 @@ public class ParserDocs {
                 while (ligneEnCours.indexOf("\"") != -1 ){
                     int index = ligneEnCours.indexOf("\"");
                     int nextindex = ligneEnCours.indexOf("\"", index +1);
+                    if(nextindex == -1){
+                        break;
+                    }
                     StringBuffer ligneTraitement = new StringBuffer (ligneEnCours);
                     ligneTraitement.delete(index, nextindex+1);
                     ligneEnCours = ligneTraitement.toString();
@@ -175,9 +195,9 @@ public class ParserDocs {
                 }
 
                 //analyser pour des for, if, while, case 
-                for(int i = 0; i<listeCommandes.length; i++){
+                for(int i = 0; i < listeCommandes.length; i++){
                     if(ligneEnCours.indexOf(listeCommandes[i]) != -1){
-                        WMC++;
+                        WMC += 1;
                     }
                 }
                 
@@ -191,8 +211,4 @@ public class ParserDocs {
         return WMC;
     }
 
-
 }
-
-
-
