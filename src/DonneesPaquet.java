@@ -1,4 +1,10 @@
+/**
+ * Classe detenant toutes les informations liées aux paquets nécessaires 
+ * pour la mise à jour du fichier CSV des paquets
+ */
 public class DonneesPaquet {
+
+    /**Déclaration des attributs */
     private int nbrCommentaires;
     private int nbrCodes;
     private float densiteCommentaire;

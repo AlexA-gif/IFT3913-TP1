@@ -1,3 +1,7 @@
+/**
+ * Classe detenant toutes les informations liées aux classes nécessaires 
+ * pour la mise à jour du fichier CSV des classes
+ */
 public class DonneesClasse {
     private int nbrCommentaires;
     private int nbrCodes;
