@@ -11,6 +11,21 @@ import java.io.IOException;
  */
 public class FileExplorer {
     
+    /**
+     * Méthode récursive permettant de générer les données classes de tous les 
+     * fichers .java présents dans le chemin en input (dossier représenté par 
+     * la variable path), et s'appelle récursivement pour traiter les sous 
+     * dossiers présents dans le chemin. 
+     * Appelle les méthodes d'écritures pour la mise à jour des fichiers CSV 
+     * correspondants
+     * 
+     * @param path Chemin
+     * 
+     * @param paquet Nom paquet
+     * 
+     * @return Un objet donneesPaquet pour que lors d'un retour d'appel récursif 
+     *          la récursion puisse fonctionner
+     */
     public DonneesPaquet traitePath (File path, String paquet){
  
         File[] listOfFiles = path.listFiles();
@@ -36,7 +51,7 @@ public class FileExplorer {
                 */
                 javaFilesData[i]=result.verifsLignes(file);
                 String nomClasse = javaFiles[i].getName();
-                this.writeInCSV(javaFilesData[i], path.getPath(), nomClasse);
+                this.writeInCSV(javaFilesData[i], path.getAbsolutePath(), nomClasse);
                 i++;
             }
         }
@@ -67,7 +82,7 @@ public class FileExplorer {
          * paquet en input.
          */
         if(nbrJavaFiles>0){
-            this.writeInCSV(retour, path.getPath(), paquet);
+            this.writeInCSV(retour, path.getAbsolutePath(), paquet);
         }
         
         return retour;
