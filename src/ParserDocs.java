@@ -85,10 +85,12 @@ public class ParserDocs {
              * Sinon on passe à la prochaine ligne
              */
             if(traitement.contains("*/")){ 
+                codeFound=true;
                 commentFound=true;
                 traitement=traitement.replaceAll(".*[*]/", "");
                 isComment=false;
             }else{
+                nbrCodes++;
                 nbrCommentaires++;
                 return;
             }
@@ -98,20 +100,24 @@ public class ParserDocs {
          * de la partie entre les guillets. 
         */
         if(traitement.contains("\"")){
+            codeFound=true;
             traitement=traitement.replaceAll("\".*\"", "");
         }
 
         /**Début d'un comentaire multiple */
         if(traitement.contains("/*")){
+            
             commentFound=true;
 
             /**Si le commentaire finit => élimination du commentaire 
              * Sinon on passe à la prochaine ligne.
             */
             if(traitement.contains("*/")){
+                codeFound=true;
                 traitement=traitement.replaceAll("/[*].*[*]/", ""); 
             }else{
                 isComment=true;
+                nbrCodes++;
                 nbrCommentaires++;
                 return;
             }
@@ -119,6 +125,7 @@ public class ParserDocs {
 
         /**Identification de commentaire simple et élimination du commentaire */
         if(traitement.contains("//")){
+            codeFound=true;
             traitement=traitement.replaceAll("//.*","");
             commentFound=true;
         }

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        File chemin = new File ("./test/");
+        File chemin = new File ("./input/");
         FileExplorer fe = new FileExplorer();
 
         try {
